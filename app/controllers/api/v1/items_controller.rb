@@ -21,6 +21,15 @@ class Api::V1::ItemsController < ApplicationController
       render file: "", status: :not_found
     end
   end
+
+  def find_all
+    items = Item.find_all_by_name(params[:name])
+    if items.nil?
+      render json: { data: [] }
+    else
+      render json: ItemSerializer.new(items)
+    end
+  end
 end
 
 
