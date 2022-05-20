@@ -14,16 +14,24 @@ class Api::V1::ItemsController < ApplicationController
 
   def update
     if Item.exists?(params[:id]) && Merchant.exists?(params[:merchant_id])
-
       render json: ItemSerializer.new(Item.update(params[:id], item_params))
     elsif Item.exists?(params[:id]) && params[:merchant_id].nil?
-
       render json: ItemSerializer.new(Item.update(params[:id], item_params))
     else
       render file: "", status: :not_found
     end
   end
+
+  def find_all
+    items = Item.find_all_by_name(params[:name])
+    if items.nil?
+      render json: { data: [] }
+    else
+      render json: ItemSerializer.new(items)
+    end
+  end
 end
+
 
 private
 
